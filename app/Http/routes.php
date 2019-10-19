@@ -18,3 +18,9 @@ Route::get('/', function () {
 Route::auth();
 
 Route::get('/home', 'HomeController@index');
+
+//instead of doing a get or post, we use resource that has all the routes
+Route::resource('admin/users', 'AdminUsersController');
+Route::get('/admin', function(){
+  return view('admin.index');
+});
