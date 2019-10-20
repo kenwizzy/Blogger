@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\User;
+use App\Photo;
 use App\Role; 
 use Illuminate\Http\Request;
 use App\Http\Requests;
@@ -15,7 +16,7 @@ class AdminUsersController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('/admin.users/index', compact('users'));
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -25,7 +26,7 @@ class AdminUsersController extends Controller
      */
     public function create()
     {
-        $roles = Role::lists('name','id')->all();//the all method need to be added because we're getting all ie the object
+        $roles = Role::lists('name','id')->all();//the all method (all()) need to be added because we're getting all ie the object
         return view('admin.users.create', compact('roles'));
     }
 
@@ -37,7 +38,30 @@ class AdminUsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-        User::create($request->all());
+        $input = $request->all();
+        
+        //Check if the request image (i.e form selected image ) exists
+        if($file = $request->file('photo_id')){
+            
+            //pull out the name of the image and append time to it
+            $name = time() . $file->getClientOriginalName();
+            
+            //move the image to images folder. If the folder doesn't exist, it creates it
+            $file->move('images', $name);
+            
+            //insert the image into the photos table using the create method and assign it to a photo variable
+            $photo = Photo::create(['file'=>$name]);
+            
+            //pull out the id of the image and add to the request array
+            $input['photo_id'] = $photo->id;
+        }
+        
+        //encrypt the request password and add to the request array
+        $input['password'] = bcrypt($request->password);
+        
+        //insert the request array to the users table
+        User::create($input);
+        
         return redirect('admin/users');
     }
 

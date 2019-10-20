@@ -32,7 +32,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-  
+            <!--Note: Always ensure the name attribute of the text fields is the same as the table properties-->
             {!! Form::open(['method'=>'POST', 'action'=>'AdminUsersController@store','files'=>'true']) !!}
 
                     <div class='form-group'>
@@ -53,8 +53,8 @@
                     {!! Form::select('is_active', array(1=>'Active', 0=>'Not Active'), 0, ['class'=>'form-control']) !!}
                     </div>
                     <div class='form-group'>
-                    {!! Form::label('file', 'Image:') !!}
-                    {!! Form::file('file', ['class'=>'form-control']) !!}
+                    {!! Form::label('photo_id', 'Image:') !!}
+                    {!! Form::file('photo_id', ['class'=>'form-control']) !!}
                     </div>
                     <div class='form-group'>
                     {!! Form::label('password', 'Password:') !!}

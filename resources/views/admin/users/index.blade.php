@@ -49,7 +49,7 @@
                   <td>{{$user->id}}</td>
                   <td>{{$user->name}}</td>
                   <td>{{$user->email}}</td>
-                  <td>{{'No Photo'}}</td>
+                  <td><img width="60" src="..{{$user->photo?$user->photo->file:'No user image'}}" alt=""></td>
                   <td>{{$user->role->name}}</td>
     <!--if the user's is_admin property is equal to 1 echo active else echo not active-->
                   <td>{{$user->is_active == 1? "Active" : "Not Active"}}</td>
