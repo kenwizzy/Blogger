@@ -6,6 +6,8 @@ use App\Role;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Requests\UsersRequest;
+use App\Http\Requests\UsersEditRequest;
+use Illuminate\Support\Facades\Session;
 class AdminUsersController extends Controller
 {
     /**
@@ -38,7 +40,19 @@ class AdminUsersController extends Controller
      */
     public function store(UsersRequest $request)
     {
-        $input = $request->all();
+        //check if the password field is empty. trim out white spaces
+        if(trim($request->password) == ''){
+            
+            //if password field is empty, allow it to submit except password
+           $input = $request->except('password'); 
+        }else{
+            
+            //if not empty allow all
+            $input = $request->all();
+            
+            //encrypt the request password and add to the request array
+        $input['password'] = bcrypt($request->password);
+        }
         
         //Check if the request image (i.e form selected image ) exists
         if($file = $request->file('photo_id')){
@@ -57,7 +71,7 @@ class AdminUsersController extends Controller
         }
         
         //encrypt the request password and add to the request array
-        $input['password'] = bcrypt($request->password);
+        //$input['password'] = bcrypt($request->password);
         
         //insert the request array to the users table
         User::create($input);
@@ -84,7 +98,9 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.users.edit');
+        $roles = Role::lists('name','id')->all();
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user','roles'));
     }
 
     /**
@@ -94,9 +110,50 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UsersEditRequest $request, $id)
     {
-        //
+        //find the user by id
+        $user = User::findOrFail($id);
+        
+        //check if the password field is empty. trim out white spaces
+        if(trim($request->password) == ''){
+            
+            //if password field is empty, allow it to submit except password
+           $input = $request->except('password'); 
+        }else{
+            
+            //if not empty allow all
+            $input = $request->all();
+            
+            //encrypt the request password and add to the request array
+        $input['password'] = bcrypt($request->password);
+        }
+
+        //request all from form
+        //$input = $request->all();
+        
+        //Check if the request image (i.e form selected image ) exists
+        if($file = $request->file('photo_id')){
+            
+            //pull out the name of the image and append time to it
+            $name = time() . $file->getClientOriginalName();
+            
+            //move the image to images folder. If the folder doesn't exist, it creates it
+            $file->move('images', $name);
+            
+            //insert the image into the photos table using the create method and assign it to a photo variable
+            $photo = Photo::create(['file'=>$name]);
+            
+            //pull out the id of the image and add to the request array
+            $input['photo_id'] = $photo->id;
+        }
+        
+        //$input['password'] = bcrypt($request->password);
+        
+        //update the request(the selected user id) array in the users table
+        $user->update($input);
+        
+        return redirect('admin/users');
     }
 
     /**
@@ -107,6 +164,14 @@ class AdminUsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        
+        //this targets the user's image and delete it as well from the server
+        unlink(public_path() . '/'.$user->photo->file); 
+        $user->delete();
+        
+        //save the message in a session
+        Session::flash('deleted_user', 'The user has been deleted successfully');
+        return redirect('admin/users');
     }
 }

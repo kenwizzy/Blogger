@@ -31,4 +31,23 @@ class User extends Authenticatable
     public function photo(){
         return $this->belongsTo('App\Photo');
     }
+    
+//    public function setPasswordAttribute($password){
+//        
+//        if(!empty($password)){
+//            $this->attribute['password'] = bcrypt($password);
+//        }
+//        
+    //}
+    
+    public function isAdmin(){
+       
+    //check if the user role is an administrator
+      if($this->role->name == 'Administrator' && $this->is_active == 1){
+          return true;
+      }  
+        
+        return false;
+        
+    }
 }

@@ -28,6 +28,13 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
+               @if(Session::has('deleted_user')) 
+                
+                <div class='alert alert-success'>
+                   <p class='text-center'>{{session('deleted_user')}}</p>
+               </div>
+                
+                @endif
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>
@@ -39,6 +46,7 @@
                   <th>Active</th>
                   <th>Created At</th>
                   <th>Updated At</th>
+                  <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -47,14 +55,25 @@
         @foreach($users as $user)
                 <tr>
                   <td>{{$user->id}}</td>
-                  <td>{{$user->name}}</td>
+                    <td><a href="{{route('admin.users.edit', $user->id)}}">{{$user->name}}</a></td>
                   <td>{{$user->email}}</td>
-                  <td><img width="60" src="..{{$user->photo?$user->photo->file:'No user image'}}" alt=""></td>
+                  <td><img width="60" src="../{{$user->photo?$user->photo->file:'images/user-icon-6.jpg'}}" alt=""></td>
                   <td>{{$user->role->name}}</td>
     <!--if the user's is_admin property is equal to 1 echo active else echo not active-->
                   <td>{{$user->is_active == 1? "Active" : "Not Active"}}</td>
                   <td>{{$user->created_at->diffForHumans()}}</td>
                   <td>{{$user->updated_at->diffForHumans()}}</td>
+                  <td>
+                    
+                  {!! Form::open(['method'=>'DELETE', 'action'=>['AdminUsersController@destroy', $user->id]]) !!}
+                
+                <div class='form-group'>
+                    {!! Form::submit('Delete', ['class'=>'btn btn-danger']) !!}
+                </div>
+                
+            {!! Form::close() !!}  
+                    
+                  </td>
                 </tr>
         @endforeach
 

@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
      * These middleware may be assigned to groups or used individually.
      *
      * @var array
+     * This is where route middlewares are registered
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Authenticate::class,
@@ -49,5 +50,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Foundation\Http\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'admin' => \App\Http\Middleware\Admin::class,
     ];
 }

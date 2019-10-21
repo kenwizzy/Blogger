@@ -19,9 +19,16 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
+Route::group(['middleware'=>'admin'], function(){
+ 
 //instead of doing a get or post, we use resource that has all the routes
 Route::resource('admin/users', 'AdminUsersController');
-Route::resource('admin/users/create', 'AdminUsersController@create');
+Route::resource('admin/users/create', 'AdminUsersController@create');    
+    
+});
+
+
+
 Route::get('/admin', function(){
     return view('admin.index');
 });
