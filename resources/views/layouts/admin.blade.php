@@ -129,13 +129,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{asset('pages/layout/top-nav.html')}}" class="nav-link">
+                <a href="{{route('admin.posts.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>All Posts</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{asset('pages/layout/boxed.html')}}" class="nav-link">
+                <a href="{{route('admin.posts.create')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create Post</p>
                 </a>
@@ -177,17 +177,19 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/forms/general.html" class="nav-link">
+                <a href="{{route('admin.categories.index')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>All Categories</p>
                 </a>
               </li>
+<!--
               <li class="nav-item">
-                <a href="pages/forms/advanced.html" class="nav-link">
+                <a href="{{route('admin.categories.create')}}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Create Category</p>
                 </a>
               </li>
+-->
             </ul>
 
           </li>

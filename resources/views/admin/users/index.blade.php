@@ -35,6 +35,15 @@
                </div>
                 
                 @endif
+                
+                @if(Session::has('user_created')) 
+                
+                <div class='alert alert-success'>
+                   <p class='text-center'>{{session('user_created')}}</p>
+               </div>
+                
+                @endif
+                
               <table id="example2" class="table table-bordered table-hover">
                 <thead>
                 <tr>

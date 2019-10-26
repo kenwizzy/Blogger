@@ -24,11 +24,12 @@ Route::group(['middleware'=>'admin'], function(){
 //instead of doing a get or post, we use resource that has all the routes
 Route::resource('admin/users', 'AdminUsersController');
 Route::resource('admin/users/create', 'AdminUsersController@create');    
-    
+Route::resource('admin/posts', 'AdminPostsController');
+Route::resource('admin/categories', 'AdminCategoriesController');
 });
 
 
 
-Route::get('/admin', function(){
+Route::get('admin', function(){
     return view('admin.index');
 });

@@ -75,7 +75,7 @@ class AdminUsersController extends Controller
         
         //insert the request array to the users table
         User::create($input);
-        
+        Session::flash('user_created', 'The user has been created successfully');
         return redirect('admin/users');
     }
 
